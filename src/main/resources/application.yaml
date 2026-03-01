@@ -1,10 +1,6 @@
 server:
   port: 8082
-
 spring:
-  config:
-    activate:
-      on-profile: development
   application:
     name: decks
   mongodb:
@@ -13,7 +9,7 @@ spring:
   oauth2:
     resourceserver:
       jwt:
-        issuer-uri: http://keycloak:8080/realms/master
+        issuer-uri: http://localhost:8080/realms/masterdeckai-realm
 management:
   endpoints:
     web:
