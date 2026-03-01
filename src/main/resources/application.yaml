@@ -1,3 +1,21 @@
+server:
+  port: 8082
+
 spring:
+  config:
+    activate:
+      on-profile: development
   application:
     name: decks
+  mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://root:example@mongodb-service:27017/decks?authSource=admin}
+
+  oauth2:
+    resourceserver:
+      jwt:
+        issuer-uri: http://keycloak:8080/realms/master
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
