@@ -2,6 +2,7 @@ package com.deckmasterai.decks.services;
 
 import com.deckmasterai.decks.dto.DeckRequest;
 import com.deckmasterai.decks.dto.DeckResponse;
+import com.deckmasterai.decks.exceptions.DeckNotFoundException;
 import com.deckmasterai.decks.mapper.DeckMapper;
 import com.deckmasterai.decks.models.Deck;
 import com.deckmasterai.decks.repositories.DeckRepository;
@@ -26,7 +27,7 @@ public class DeckService {
 
     public DeckResponse getById(String id, String profileId) {
         Deck deck = repository.findByIdAndProfileId(id, profileId)
-                .orElseThrow(() -> new RuntimeException("Deck not found"));
+                .orElseThrow(() -> new DeckNotFoundException("Deck not found"));
 
         return mapper.toResponse(deck);
     }
@@ -40,7 +41,7 @@ public class DeckService {
 
     public DeckResponse update(String id, DeckRequest request, String profileId) {
         Deck deck = repository.findByIdAndProfileId(id, profileId)
-                .orElseThrow(() -> new RuntimeException("Deck not found"));
+                .orElseThrow(() -> new DeckNotFoundException("Deck not found"));
 
         mapper.updateEntityFromDto(request, deck);
 
@@ -49,7 +50,7 @@ public class DeckService {
 
     public void delete(String id, String profileId) {
         Deck deck = repository.findByIdAndProfileId(id, profileId)
-                .orElseThrow(() -> new RuntimeException("Deck not found"));
+                .orElseThrow(() -> new DeckNotFoundException("Deck not found"));
 
         repository.delete(deck);
     }
