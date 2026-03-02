@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  deck-database:
+    image: mongo:latest
+    container_name: deck-database
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - "27017:27017"
+    volumes:
+      - deck-data:/data/db
+volumes:
+  deck-data:
