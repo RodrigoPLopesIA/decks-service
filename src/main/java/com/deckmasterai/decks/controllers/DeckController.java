@@ -22,11 +22,24 @@ public class DeckController {
 
     @GetMapping
     public ResponseEntity<Page<DeckResponse>> getAll(Pageable pageable,
+                                                     @RequestParam(required = false) String cardId,
                                                      @AuthenticationPrincipal Jwt jwt
     ) {
+
+        if (cardId != null) {
+            return ResponseEntity.ok(service.getDecksByCardId(pageable, cardId, jwt.getSubject()));
+        }
         return ResponseEntity.ok(service.getAll(pageable, jwt.getSubject()));
     }
 
+    @GetMapping("/{deckId}/card/{cardId}")
+    public ResponseEntity<DeckResponse> getByIdByCardId(
+            @PathVariable String deckId,
+            @PathVariable String cardId,
+            @AuthenticationPrincipal Jwt jwt
+    ) {
+        return ResponseEntity.ok(service.getDeckByIdByCardId(deckId, cardId, jwt.getSubject()));
+    }
     @GetMapping("/{id}")
     public ResponseEntity<DeckResponse> getById(
             @PathVariable String id,
@@ -63,4 +76,6 @@ public class DeckController {
         service.delete(id, jwt.getSubject());
         return ResponseEntity.noContent().build();
     }
+
+
 }

@@ -7,6 +7,7 @@ import com.deckmasterai.decks.mapper.DeckMapper;
 import com.deckmasterai.decks.models.Deck;
 import com.deckmasterai.decks.repositories.DeckRepository;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -53,5 +54,21 @@ public class DeckService {
                 .orElseThrow(() -> new DeckNotFoundException("Deck not found"));
 
         repository.delete(deck);
+    }
+
+    public Page<DeckResponse> getDecksByCardId(Pageable pageable, String cardId, String subject) {
+        return repository.findAllByCardIdsContainingAndProfileId(pageable, cardId, subject)
+                .map(mapper::toResponse);
+    }
+
+    public DeckResponse getDeckByIdByCardId(String deckId, String cardId, String subject) {
+        Deck deck = repository.findByIdAndProfileId(deckId, subject)
+                .orElseThrow(() -> new DeckNotFoundException("Deck not found"));
+
+        if (!deck.getCardIds().contains(cardId)) {
+            throw new DeckNotFoundException("Deck does not contain the specified card");
+        }
+
+        return mapper.toResponse(deck);
     }
 }
